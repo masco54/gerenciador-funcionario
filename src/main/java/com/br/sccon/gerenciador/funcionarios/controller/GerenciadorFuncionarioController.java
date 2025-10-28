@@ -1,0 +1,75 @@
+package com.br.sccon.gerenciador.funcionarios.controller;
+
+import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPatchRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPutRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaResponseDto;
+import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
+import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
+import com.br.sccon.gerenciador.funcionarios.service.PessoaService;
+import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/person")
+public class GerenciadorFuncionarioController {
+
+    private final PessoaRepository pessoaRepository;
+    private final PessoaService pessoaService;
+    private final PessoaMapeamento pessoaMapeamento;
+
+    @Autowired
+    public GerenciadorFuncionarioController(PessoaRepository pessoaRepository, PessoaService pessoaService, PessoaMapeamento pessoaMapeamento) {
+        this.pessoaRepository = pessoaRepository;
+        this.pessoaService = pessoaService;
+        this.pessoaMapeamento = pessoaMapeamento;
+    }
+
+    @GetMapping
+    public List<Pessoa> listarPessoasOrdenadas() {
+        return pessoaRepository.buscarTodasPessoasOrdenadasPorNome();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PessoaResponseDto> listarPessoaPorId(@PathVariable Long id) {
+        var pessoa = pessoaService.consultarPessoaPorId(id);
+        return ResponseEntity.ok(pessoaMapeamento.dominioParaResponse(pessoa));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> cadastrar(@Valid @RequestBody PessoaRequestDto pessoaRequest) {
+
+        var pessoa = pessoaService.salvar(pessoaRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaMapeamento.dominioParaResponse(pessoa));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+
+        pessoaService.deletar(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PessoaResponseDto> atualizacaoTotal(@PathVariable Long id, @Valid @RequestBody PessoaPutRequestDto request) {
+
+        var pessoa = pessoaService.atualizarTotal(id, request);
+        return ResponseEntity.ok(pessoaMapeamento.dominioParaResponse(pessoa));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<PessoaResponseDto> atualizacaoParcial(@PathVariable Long id, @Valid @RequestBody PessoaPatchRequestDto request) {
+
+        var pessoa = pessoaService.atualizarParcial(id, request);
+        return ResponseEntity.ok(pessoaMapeamento.dominioParaResponse(pessoa));
+    }
+
+}
