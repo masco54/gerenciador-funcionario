@@ -3,12 +3,10 @@ package com.br.sccon.gerenciador.funcionarios.controller.dto.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record PessoaIdadeResponseDto(
+public record PessoaSalarioResponseDto(
         Long id,
         String nome,
-        Long idadeEmDias,
-        Long idadeEmMeses,
-        Long idadeEmAnos
+        String salario
 ) {
 
 }

@@ -4,6 +4,7 @@ import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchR
 import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaSalarioResponseDto;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
 
 public interface PessoaService {
@@ -19,5 +20,7 @@ public interface PessoaService {
     Pessoa consultarPessoaPorId(Long id);
 
     PessoaIdadeResponseDto calcularIdade(Long id, String output);
+
+    PessoaSalarioResponseDto calcularSalario(Long id, String output);
 
 }

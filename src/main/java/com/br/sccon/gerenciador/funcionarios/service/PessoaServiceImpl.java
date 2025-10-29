@@ -4,6 +4,7 @@ import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchR
 import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaSalarioResponseDto;
 import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
@@ -14,14 +15,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
 
-    private static final Set<String> FORMATOS_VALIDOS = Set.of("days", "months", "years");
+    private static final Set<String> FORMATOS_VALIDOS_PARA_IDADE = Set.of("days", "months", "years");
+    private static final Set<String> FORMATOS_VALIDOS_PARA_SALARIO = Set.of("min", "full");
+
+    private static final BigDecimal SALARIO = new BigDecimal("1558.00");
+    private static final BigDecimal SALARIO_PORCENTAGEM = new BigDecimal("0.18");
+    private static final BigDecimal SALARIO_ACRESCIMO_FIXO = new BigDecimal("500.00");
+    private static final BigDecimal SALARIO_MINIMO_REFERENCIA = new BigDecimal("1302.00");
+
 
     @Autowired
     private PessoaMapeamento pessoaMapeamento;
@@ -37,7 +48,7 @@ public class PessoaServiceImpl implements PessoaService {
     @Override
     public PessoaIdadeResponseDto calcularIdade(Long id, String output) {
 
-        validaFormatoOutput(output);
+        validaFormatoOutputIdade(output);
 
         var pessoa = pessoaRepository.consultaPorId(id).orElseThrow(() -> new NaoEncontradoException("Pessoa com ID " + id + " não encontrada."));
 
@@ -48,20 +59,60 @@ public class PessoaServiceImpl implements PessoaService {
         Long totalMeses = output.equals("months") ? ChronoUnit.MONTHS.between(dataNascimento, hoje) : null;
         Long totalAnos = output.equals("years") ? ChronoUnit.YEARS.between(dataNascimento, hoje) : null;
 
-        return new PessoaIdadeResponseDto(
-                pessoa.getId().toString(),
-                pessoa.getNome(),
-                totalDias,
-                totalMeses,
-                totalAnos
-        );
+        return new PessoaIdadeResponseDto(pessoa.getId(), pessoa.getNome(), totalDias, totalMeses, totalAnos);
     }
 
-    private static void validaFormatoOutput(String output) {
-        if (!FORMATOS_VALIDOS.contains(output)) {
-            var mensagem = String.format("Formato do parametro output inválido: %s. Use os seguintes formatos: %s.",
-                    String.join(", ", output),
-                    String.join(", ", FORMATOS_VALIDOS));
+    @Override
+    public PessoaSalarioResponseDto calcularSalario(Long id, String output) {
+        validaFormatoOutputSalario(output);
+
+        var pessoa = pessoaRepository.consultaPorId(id).orElseThrow(() -> new NaoEncontradoException("Pessoa com ID " + id + " não encontrada."));
+
+        long anosDeServico = ChronoUnit.YEARS.between(pessoa.getDataAdmissao().toLocalDate(), ZonedDateTime.now().toLocalDate());
+        var salarioFull = calculaSalarioFull(anosDeServico);
+        var salarioMin = calculaSalarioMin(salarioFull);
+
+        var salario = output.equals("full") ? salarioFull : salarioMin;
+
+        return new PessoaSalarioResponseDto(pessoa.getId(), pessoa.getNome(), salario.toString());
+
+    }
+
+    private static BigDecimal calculaSalarioMin(BigDecimal salarioTotal) {
+
+        BigDecimal salarioEmMinimos = BigDecimal.ZERO;
+
+        if (SALARIO_MINIMO_REFERENCIA.compareTo(BigDecimal.ZERO) > 0) {
+            salarioEmMinimos = salarioTotal.divide(SALARIO_MINIMO_REFERENCIA, 2, RoundingMode.CEILING);
+        }
+
+        return salarioEmMinimos;
+    }
+
+    private static BigDecimal calculaSalarioFull(long anosDeServico) {
+        var salarioTotal = SALARIO;
+
+        for (int i = 0; i < anosDeServico; i++) {
+            var acrescimoPercentual = SALARIO.multiply(SALARIO_PORCENTAGEM);
+
+            salarioTotal = salarioTotal.add(acrescimoPercentual).add(SALARIO_ACRESCIMO_FIXO);
+        }
+
+        salarioTotal = salarioTotal.setScale(2, RoundingMode.HALF_UP);
+
+        return salarioTotal;
+    }
+
+    private static void validaFormatoOutputIdade(String output) {
+        if (!FORMATOS_VALIDOS_PARA_IDADE.contains(output)) {
+            var mensagem = String.format("Formato do parametro output inválido: %s. Use os seguintes formatos: %s.", String.join(", ", output), String.join(", ", FORMATOS_VALIDOS_PARA_IDADE));
+            throw new FormatoSaidaInvalidoException(mensagem);
+        }
+    }
+
+    private static void validaFormatoOutputSalario(String output) {
+        if (!FORMATOS_VALIDOS_PARA_SALARIO.contains(output)) {
+            var mensagem = String.format("Formato do parametro output inválido: %s. Use os seguintes formatos: %s.", String.join(", ", output), String.join(", ", FORMATOS_VALIDOS_PARA_SALARIO));
             throw new FormatoSaidaInvalidoException(mensagem);
         }
     }

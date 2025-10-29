@@ -5,6 +5,7 @@ import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutReq
 import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
 import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaSalarioResponseDto;
 import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
 import com.br.sccon.gerenciador.funcionarios.service.PessoaService;
@@ -54,6 +55,18 @@ public class GerenciadorFuncionarioController {
         var idadePessoa = pessoaService.calcularIdade(id, output);
 
         return ResponseEntity.ok(idadePessoa);
+    }
+
+    @GetMapping("/{id}/salary")
+    public ResponseEntity<PessoaSalarioResponseDto> calcularSalarioPessoa(
+            @PathVariable
+            Long id,
+            @RequestParam @NotBlank(message = "O parâmetro 'output' é obrigatório.")
+            String output) {
+
+        var resultado = pessoaService.calcularSalario(id, output);
+
+        return ResponseEntity.ok(resultado);
     }
 
     @PostMapping
