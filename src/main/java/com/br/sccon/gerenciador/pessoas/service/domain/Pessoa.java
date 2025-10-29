@@ -1,6 +1,7 @@
 package com.br.sccon.gerenciador.pessoas.service.domain;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 public class Pessoa {
 

@@ -5,9 +5,12 @@ import com.br.sccon.gerenciador.pessoas.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.pessoas.repository.PessoaRepository;
 import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
 import com.br.sccon.gerenciador.pessoas.service.exception.ConflitoException;
+import com.br.sccon.gerenciador.pessoas.service.exception.NaoEncontradoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -74,4 +78,26 @@ public class PessoaServiceImplTest {
         verify(pessoaRepository).consultaPorIdDesc();
         verify(pessoaRepository).salvarPessoa(argThat(pessoa -> pessoa.getId().equals(novoIdEsperado)));
     }
+
+    @Test
+    void quandoConsultarPessoaENaoEncontrarDeveLancarExcecaoNaoEncontrado() {
+        when(pessoaRepository.consultaPorId(ID_NAO_EXISTENTE)).thenReturn(Optional.empty());
+
+        assertThrows(NaoEncontradoException.class, () -> pessoaService.deletar(ID_NAO_EXISTENTE));
+        verify(pessoaRepository, never()).remover(anyLong());
+    }
+
+    @ParameterizedTest
+    @MethodSource("formatosDeOutputParaCalculos")
+    void quandoCalcularIdadePessoaENaoEncontrarPessoaDeveLancarExcecaoNaoEncontrado(String output) {
+        when(pessoaRepository.consultaPorId(ID_NAO_EXISTENTE)).thenReturn(Optional.empty());
+
+        assertThrows(NaoEncontradoException.class, () -> pessoaService.calcularIdade(ID_NAO_EXISTENTE, output));
+    }
+
+    static Stream<String> formatosDeOutputParaCalculos() {
+        return Stream.of("days", "months", "years");
+    }
+
+
 }

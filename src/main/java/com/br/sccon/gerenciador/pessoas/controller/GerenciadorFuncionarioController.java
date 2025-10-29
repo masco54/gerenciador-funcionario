@@ -14,12 +14,14 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/person")
+@Validated
 public class GerenciadorFuncionarioController {
 
     private final PessoaRepository pessoaRepository;
@@ -61,7 +63,7 @@ public class GerenciadorFuncionarioController {
     public ResponseEntity<PessoaSalarioResponseDto> calcularSalarioPessoa(
             @PathVariable
             Long id,
-            @RequestParam @NotBlank(message = "O parâmetro 'output' é obrigatório.")
+            @RequestParam @NotBlank(message = "O parâmetro output é obrigatório.")
             String output) {
 
         var resultado = pessoaService.calcularSalario(id, output);

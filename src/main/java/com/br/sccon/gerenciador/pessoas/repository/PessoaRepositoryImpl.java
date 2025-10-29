@@ -1,6 +1,7 @@
 package com.br.sccon.gerenciador.pessoas.repository;
 
 import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,7 +22,7 @@ public class PessoaRepositoryImpl implements PessoaRepository {
         inicializarPessoas();
     }
 
-    public Pessoa salvarPessoa(Pessoa pessoa) {
+    public Pessoa salvarPessoa(@Valid Pessoa pessoa) {
         return pessoasMap.put(pessoa.getId(), pessoa);
     }
 
