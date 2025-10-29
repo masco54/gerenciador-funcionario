@@ -62,15 +62,15 @@ public class PessoaRepositoryImpl implements PessoaRepository {
         var p2 = new Pessoa(
                 2L,
                 "Maria de Fátima",
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter)
+                ZonedDateTime.parse("1990-09-09T00:00:00Z", dateTimeFormatter),
+                ZonedDateTime.parse("2002-04-06T00:00:00Z", dateTimeFormatter)
         );
 
         var p3 = new Pessoa(
                 3L,
-                "Maria de Fátima",
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter)
+                "Marco Aurélio",
+                ZonedDateTime.parse("2005-04-06T00:00:00Z", dateTimeFormatter),
+                ZonedDateTime.parse("2022-04-06T00:00:00Z", dateTimeFormatter)
         );
 
         pessoasMap.put(p1.getId(), p1);
