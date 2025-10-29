@@ -17,4 +17,6 @@ public interface PessoaService {
 
     Pessoa consultarPessoaPorId(Long id);
 
+    String calcularIdade(Long id, String output);
+
 }

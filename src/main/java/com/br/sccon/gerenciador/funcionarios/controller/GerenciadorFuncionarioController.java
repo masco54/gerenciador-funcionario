@@ -9,6 +9,7 @@ import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
 import com.br.sccon.gerenciador.funcionarios.service.PessoaService;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,18 @@ public class GerenciadorFuncionarioController {
     public ResponseEntity<PessoaResponseDto> listarPessoaPorId(@PathVariable Long id) {
         var pessoa = pessoaService.consultarPessoaPorId(id);
         return ResponseEntity.ok(pessoaMapeamento.dominioParaResponse(pessoa));
+    }
+
+    @GetMapping("/{id}/age")
+    public ResponseEntity<String> calcularIdadePessoa(
+            @PathVariable
+            Long id,
+            @RequestParam @NotBlank(message = "O parâmetro output é obrigatório.")
+            String output) {
+
+        var idadePessoa = pessoaService.calcularIdade(id, output);
+
+        return ResponseEntity.ok(idadePessoa);
     }
 
     @PostMapping

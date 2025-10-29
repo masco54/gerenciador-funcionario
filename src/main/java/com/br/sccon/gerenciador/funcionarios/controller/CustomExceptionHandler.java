@@ -2,6 +2,7 @@ package com.br.sccon.gerenciador.funcionarios.controller;
 
 import com.br.sccon.gerenciador.funcionarios.controller.dto.ErroResponseDto;
 import com.br.sccon.gerenciador.funcionarios.service.exception.ConflitoException;
+import com.br.sccon.gerenciador.funcionarios.service.exception.FormatoSaidaInvalidoException;
 import com.br.sccon.gerenciador.funcionarios.service.exception.NaoEncontradoException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
@@ -30,9 +31,19 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(erro, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler({FormatoSaidaInvalidoException.class})
+    public ResponseEntity<ErroResponseDto> handleFormatoSaidaInvalido(FormatoSaidaInvalidoException ex) {
+        var erro = new ErroResponseDto(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({NaoEncontradoException.class, NoResourceFoundException.class})
     public ResponseEntity<ErroResponseDto> handleRecursoNaoEncontradoException(Exception ex) {
-        ErroResponseDto erro = new ErroResponseDto(
+        var erro = new ErroResponseDto(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage()
@@ -42,7 +53,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErroResponseDto> exceptionGeral(Exception ex) {
-        ErroResponseDto erro = new ErroResponseDto(
+        var erro = new ErroResponseDto(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 ex.getMessage()
@@ -52,7 +63,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler({MethodNotAllowedException.class, HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<ErroResponseDto> handleMethoNotAllowedException(Exception ex) {
-        ErroResponseDto erro = new ErroResponseDto(
+        var erro = new ErroResponseDto(
                 HttpStatus.METHOD_NOT_ALLOWED.value(),
                 HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase(),
                 ex.getMessage()
@@ -62,7 +73,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroResponseDto> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        String erros = ex.getBindingResult().getFieldErrors().stream()
+        var erros = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
@@ -76,7 +87,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(InvalidFormatException.class)
     public ResponseEntity<ErroResponseDto> handleInvalidFormatException(InvalidFormatException ex) {
-        String campo = ex.getPath().stream()
+        var campo = ex.getPath().stream()
                 .map(ref -> ref.getFieldName() != null ? ref.getFieldName() : "")
                 .collect(Collectors.joining("."));
 
@@ -90,12 +101,12 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErroResponseDto> handleConstraintViolationException(ConstraintViolationException ex) {
-        String mensagemErro = ex.getConstraintViolations().stream()
+        var mensagemErro = ex.getConstraintViolations().stream()
                 .map(violation -> violation.getMessage())
                 .findFirst()
                 .orElse("Erro de validação de parâmetro.");
 
-        ErroResponseDto erro = new ErroResponseDto(
+        var erro = new ErroResponseDto(
                 HttpStatus.BAD_REQUEST.value(),
                 "Requisição Mal Formatada",
                 mensagemErro
@@ -105,7 +116,7 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     public ResponseEntity<ErroResponseDto> handlebaRequest(Exception ex) {
-        ErroResponseDto erro = new ErroResponseDto(
+        var erro = new ErroResponseDto(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 ex.getMessage()
