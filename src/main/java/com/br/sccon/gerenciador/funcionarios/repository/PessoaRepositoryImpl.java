@@ -3,7 +3,6 @@ package com.br.sccon.gerenciador.funcionarios.repository;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 public class PessoaRepositoryImpl implements PessoaRepository {
 
     private final ConcurrentHashMap<Long, Pessoa> pessoasMap = new ConcurrentHashMap<>();
-    private static final ZoneId SAO_PAULO_ZONE = ZoneId.of("America/Sao_Paulo");
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
     public PessoaRepositoryImpl() {
@@ -58,7 +56,7 @@ public class PessoaRepositoryImpl implements PessoaRepository {
                 1L,
                 "José da Silva",
                 ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter)
+                ZonedDateTime.parse("2020-05-10T00:00:00Z", dateTimeFormatter)
         );
 
         var p2 = new Pessoa(

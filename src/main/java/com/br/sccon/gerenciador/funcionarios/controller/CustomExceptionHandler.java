@@ -13,6 +13,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -113,9 +114,9 @@ public class CustomExceptionHandler {
         );
         return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
     }
-
-    @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<ErroResponseDto> handlebaRequest(Exception ex) {
+    
+    @ExceptionHandler({BadRequestException.class, HandlerMethodValidationException.class})
+    public ResponseEntity<ErroResponseDto> handleBadRequest(Exception ex) {
         var erro = new ErroResponseDto(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),

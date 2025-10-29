@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -39,18 +36,17 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public PessoaIdadeResponseDto calcularIdade(Long id, String output) {
-        var parametros = Arrays.asList(output.toLowerCase().split("\\|"));
 
-        validaFormatoOutput(parametros);
+        validaFormatoOutput(output);
 
         var pessoa = pessoaRepository.consultaPorId(id).orElseThrow(() -> new NaoEncontradoException("Pessoa com ID " + id + " não encontrada."));
 
         var dataNascimento = pessoa.getDataNascimento().toLocalDate();
         var hoje = LocalDate.now();
 
-        Long totalDias = parametros.stream().anyMatch(p -> p.equals("days")) ? ChronoUnit.DAYS.between(dataNascimento, hoje) : null;
-        Long totalMeses = parametros.stream().anyMatch(p -> p.equals("months")) ? ChronoUnit.MONTHS.between(dataNascimento, hoje) : null;
-        Long totalAnos = parametros.stream().anyMatch(p -> p.equals("years")) ? ChronoUnit.YEARS.between(dataNascimento, hoje) : null;
+        Long totalDias = output.equals("days") ? ChronoUnit.DAYS.between(dataNascimento, hoje) : null;
+        Long totalMeses = output.equals("months") ? ChronoUnit.MONTHS.between(dataNascimento, hoje) : null;
+        Long totalAnos = output.equals("years") ? ChronoUnit.YEARS.between(dataNascimento, hoje) : null;
 
         return new PessoaIdadeResponseDto(
                 pessoa.getId().toString(),
@@ -61,15 +57,10 @@ public class PessoaServiceImpl implements PessoaService {
         );
     }
 
-    private static void validaFormatoOutput(List<String> parametros) {
-        var possuiParametrosInvalidos = parametros
-                .stream()
-                .filter(p -> !FORMATOS_VALIDOS.contains(p))
-                .collect(Collectors.toList());
-
-        if (!possuiParametrosInvalidos.isEmpty()) {
-            var mensagem = String.format("Formato(s) de saída inválido(s): %s. Use os seguintes formatos: %s.",
-                    String.join(", ", possuiParametrosInvalidos),
+    private static void validaFormatoOutput(String output) {
+        if (!FORMATOS_VALIDOS.contains(output)) {
+            var mensagem = String.format("Formato do parametro output inválido: %s. Use os seguintes formatos: %s.",
+                    String.join(", ", output),
                     String.join(", ", FORMATOS_VALIDOS));
             throw new FormatoSaidaInvalidoException(mensagem);
         }
