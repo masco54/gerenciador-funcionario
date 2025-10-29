@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
@@ -159,10 +160,14 @@ public class PessoaServiceImpl implements PessoaService {
         var pessoaEncontrada = pessoa.get();
 
         pessoaEncontrada.setNome(requestDto.nome());
-        pessoaEncontrada.setDataAdmissao(requestDto.dataAdmissao());
-        pessoaEncontrada.setDataNascimento(requestDto.dataNascimento());
+        pessoaEncontrada.setDataAdmissao(converterComZona(requestDto.dataAdmissao()));
+        pessoaEncontrada.setDataNascimento(converterComZona(requestDto.dataNascimento()));
 
         return pessoaRepository.salvarPessoa(pessoaEncontrada);
+    }
+
+    private ZonedDateTime converterComZona(LocalDate data) {
+        return data.atStartOfDay(ZoneId.of("America/Sao_Paulo"));
     }
 
     @Override
@@ -181,11 +186,11 @@ public class PessoaServiceImpl implements PessoaService {
         }
 
         if (requestDto.dataAdmissao() != null) {
-            pessoaEncontrada.setDataAdmissao(requestDto.dataAdmissao());
+            pessoaEncontrada.setDataAdmissao(converterComZona(requestDto.dataAdmissao()));
         }
 
         if (requestDto.dataNascimento() != null) {
-            pessoaEncontrada.setDataNascimento(requestDto.dataNascimento());
+            pessoaEncontrada.setDataNascimento(converterComZona(requestDto.dataNascimento()));
         }
 
         return pessoaRepository.salvarPessoa(pessoaEncontrada);

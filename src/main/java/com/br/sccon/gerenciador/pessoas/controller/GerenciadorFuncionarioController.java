@@ -9,7 +9,6 @@ import com.br.sccon.gerenciador.pessoas.controller.dto.response.PessoaSalarioRes
 import com.br.sccon.gerenciador.pessoas.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.pessoas.repository.PessoaRepository;
 import com.br.sccon.gerenciador.pessoas.service.PessoaService;
-import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,9 @@ public class GerenciadorFuncionarioController {
     }
 
     @GetMapping
-    public List<Pessoa> listarPessoasOrdenadas() {
-        return pessoaRepository.buscarTodasPessoasOrdenadasPorNome();
+    public ResponseEntity<List<PessoaResponseDto>> listarPessoasOrdenadas() {
+        var pessoas = pessoaRepository.buscarTodasPessoasOrdenadasPorNome();
+        return ResponseEntity.ok(pessoas.stream().map(pessoaMapeamento::dominioParaResponse).toList());
     }
 
     @GetMapping("/{id}")
