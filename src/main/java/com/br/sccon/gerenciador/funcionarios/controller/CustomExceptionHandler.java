@@ -1,6 +1,6 @@
 package com.br.sccon.gerenciador.funcionarios.controller;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.ErroResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.ErroResponseDto;
 import com.br.sccon.gerenciador.funcionarios.service.exception.ConflitoException;
 import com.br.sccon.gerenciador.funcionarios.service.exception.FormatoSaidaInvalidoException;
 import com.br.sccon.gerenciador.funcionarios.service.exception.NaoEncontradoException;

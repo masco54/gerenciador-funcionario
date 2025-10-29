@@ -1,8 +1,9 @@
 package com.br.sccon.gerenciador.funcionarios.service;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPatchRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPutRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
 
 public interface PessoaService {
@@ -17,6 +18,6 @@ public interface PessoaService {
 
     Pessoa consultarPessoaPorId(Long id);
 
-    String calcularIdade(Long id, String output);
+    PessoaIdadeResponseDto calcularIdade(Long id, String output);
 
 }

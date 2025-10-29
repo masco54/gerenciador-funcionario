@@ -1,9 +1,10 @@
 package com.br.sccon.gerenciador.funcionarios.controller;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPatchRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPutRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaResponseDto;
 import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
 import com.br.sccon.gerenciador.funcionarios.service.PessoaService;
@@ -44,7 +45,7 @@ public class GerenciadorFuncionarioController {
     }
 
     @GetMapping("/{id}/age")
-    public ResponseEntity<String> calcularIdadePessoa(
+    public ResponseEntity<PessoaIdadeResponseDto> calcularIdadePessoa(
             @PathVariable
             Long id,
             @RequestParam @NotBlank(message = "O parâmetro output é obrigatório.")

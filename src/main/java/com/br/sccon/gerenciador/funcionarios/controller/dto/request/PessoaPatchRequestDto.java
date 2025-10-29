@@ -1,4 +1,4 @@
-package com.br.sccon.gerenciador.funcionarios.controller.dto;
+package com.br.sccon.gerenciador.funcionarios.controller.dto.request;
 
 import jakarta.validation.constraints.PastOrPresent;
 

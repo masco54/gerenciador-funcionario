@@ -1,7 +1,7 @@
 package com.br.sccon.gerenciador.funcionarios.mapeamento;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaResponseDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaResponseDto;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
 import org.mapstruct.Mapper;
 

@@ -1,8 +1,9 @@
 package com.br.sccon.gerenciador.funcionarios.service;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPatchRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaPutRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
+import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
 import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
 import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
 import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
@@ -37,7 +38,7 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public String calcularIdade(Long id, String output) {
+    public PessoaIdadeResponseDto calcularIdade(Long id, String output) {
         var parametros = Arrays.asList(output.toLowerCase().split("\\|"));
 
         validaFormatoOutput(parametros);
@@ -47,16 +48,17 @@ public class PessoaServiceImpl implements PessoaService {
         var dataNascimento = pessoa.getDataNascimento().toLocalDate();
         var hoje = LocalDate.now();
 
-        var totalDias = ChronoUnit.DAYS.between(dataNascimento, hoje);
-        var totalMeses = ChronoUnit.MONTHS.between(dataNascimento, hoje);
-        var totalAnos = ChronoUnit.YEARS.between(dataNascimento, hoje);
+        Long totalDias = parametros.stream().anyMatch(p -> p.equals("days")) ? ChronoUnit.DAYS.between(dataNascimento, hoje) : null;
+        Long totalMeses = parametros.stream().anyMatch(p -> p.equals("months")) ? ChronoUnit.MONTHS.between(dataNascimento, hoje) : null;
+        Long totalAnos = parametros.stream().anyMatch(p -> p.equals("years")) ? ChronoUnit.YEARS.between(dataNascimento, hoje) : null;
 
-        return parametros.stream().map(p -> switch (p) {
-            case "days" -> "Idade em dias: " + totalDias;
-            case "months" -> "Idade em meses: " + totalMeses;
-            case "years" -> "Idade em anos: " + totalAnos;
-            default -> "";
-        }).collect(Collectors.joining(" | "));
+        return new PessoaIdadeResponseDto(
+                pessoa.getId().toString(),
+                pessoa.getNome(),
+                totalDias,
+                totalMeses,
+                totalAnos
+        );
     }
 
     private static void validaFormatoOutput(List<String> parametros) {
