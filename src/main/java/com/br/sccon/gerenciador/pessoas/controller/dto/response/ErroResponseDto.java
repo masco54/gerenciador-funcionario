@@ -1,4 +1,4 @@
-package com.br.sccon.gerenciador.funcionarios.controller.dto.response;
+package com.br.sccon.gerenciador.pessoas.controller.dto.response;
 
 public record ErroResponseDto(
         int status,

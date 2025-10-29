@@ -1,4 +1,4 @@
-package com.br.sccon.gerenciador.funcionarios.service.exception;
+package com.br.sccon.gerenciador.pessoas.service.exception;
 
 public class NaoEncontradoException extends RuntimeException {
 

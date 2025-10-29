@@ -1,9 +1,9 @@
-package com.br.sccon.gerenciador.funcionarios.controller;
+package com.br.sccon.gerenciador.pessoas.controller;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.response.ErroResponseDto;
-import com.br.sccon.gerenciador.funcionarios.service.exception.ConflitoException;
-import com.br.sccon.gerenciador.funcionarios.service.exception.FormatoSaidaInvalidoException;
-import com.br.sccon.gerenciador.funcionarios.service.exception.NaoEncontradoException;
+import com.br.sccon.gerenciador.pessoas.controller.dto.response.ErroResponseDto;
+import com.br.sccon.gerenciador.pessoas.service.exception.ConflitoException;
+import com.br.sccon.gerenciador.pessoas.service.exception.FormatoSaidaInvalidoException;
+import com.br.sccon.gerenciador.pessoas.service.exception.NaoEncontradoException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
@@ -114,7 +114,7 @@ public class CustomExceptionHandler {
         );
         return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler({BadRequestException.class, HandlerMethodValidationException.class})
     public ResponseEntity<ErroResponseDto> handleBadRequest(Exception ex) {
         var erro = new ErroResponseDto(

@@ -1,4 +1,4 @@
-package com.br.sccon.gerenciador.funcionarios.service.domain;
+package com.br.sccon.gerenciador.pessoas.service.domain;
 
 import java.time.ZonedDateTime;
 

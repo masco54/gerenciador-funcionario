@@ -1,6 +1,6 @@
-package com.br.sccon.gerenciador.funcionarios.repository;
+package com.br.sccon.gerenciador.pessoas.repository;
 
-import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
+import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
 
 import java.util.List;
 import java.util.Optional;

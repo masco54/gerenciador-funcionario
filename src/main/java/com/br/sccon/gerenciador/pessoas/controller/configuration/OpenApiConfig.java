@@ -1,4 +1,4 @@
-package com.br.sccon.gerenciador.funcionarios.controller.configuration;
+package com.br.sccon.gerenciador.pessoas.controller.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

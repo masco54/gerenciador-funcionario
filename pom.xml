@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.br.sccon</groupId>
-    <artifactId>gerenciador-de-funcionarios</artifactId>
+    <artifactId>gerenciador-de-pessoas</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>gerenciador-de-funcionarios</name>
     <description>Projeto para gerenciar funcionários da empresa SCCON</description>

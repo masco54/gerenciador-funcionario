@@ -1,15 +1,15 @@
-package com.br.sccon.gerenciador.funcionarios.controller;
+package com.br.sccon.gerenciador.pessoas.controller;
 
-import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPatchRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaPutRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.request.PessoaRequestDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaIdadeResponseDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaResponseDto;
-import com.br.sccon.gerenciador.funcionarios.controller.dto.response.PessoaSalarioResponseDto;
-import com.br.sccon.gerenciador.funcionarios.mapeamento.PessoaMapeamento;
-import com.br.sccon.gerenciador.funcionarios.repository.PessoaRepository;
-import com.br.sccon.gerenciador.funcionarios.service.PessoaService;
-import com.br.sccon.gerenciador.funcionarios.service.domain.Pessoa;
+import com.br.sccon.gerenciador.pessoas.controller.dto.request.PessoaPatchRequestDto;
+import com.br.sccon.gerenciador.pessoas.controller.dto.request.PessoaPutRequestDto;
+import com.br.sccon.gerenciador.pessoas.controller.dto.request.PessoaRequestDto;
+import com.br.sccon.gerenciador.pessoas.controller.dto.response.PessoaIdadeResponseDto;
+import com.br.sccon.gerenciador.pessoas.controller.dto.response.PessoaResponseDto;
+import com.br.sccon.gerenciador.pessoas.controller.dto.response.PessoaSalarioResponseDto;
+import com.br.sccon.gerenciador.pessoas.mapeamento.PessoaMapeamento;
+import com.br.sccon.gerenciador.pessoas.repository.PessoaRepository;
+import com.br.sccon.gerenciador.pessoas.service.PessoaService;
+import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
