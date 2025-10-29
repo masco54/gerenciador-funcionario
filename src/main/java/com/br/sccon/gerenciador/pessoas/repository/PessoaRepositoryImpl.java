@@ -3,7 +3,7 @@ package com.br.sccon.gerenciador.pessoas.repository;
 import com.br.sccon.gerenciador.pessoas.service.domain.Pessoa;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class PessoaRepositoryImpl implements PessoaRepository {
 
     private final ConcurrentHashMap<Long, Pessoa> pessoasMap = new ConcurrentHashMap<>();
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public PessoaRepositoryImpl() {
         inicializarPessoas();
@@ -55,22 +55,22 @@ public class PessoaRepositoryImpl implements PessoaRepository {
         var p1 = new Pessoa(
                 1L,
                 "José da Silva",
-                ZonedDateTime.parse("2000-04-06T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2020-05-10T00:00:00Z", dateTimeFormatter)
+                LocalDate.parse("2000-04-06", dateTimeFormatter),
+                LocalDate.parse("2020-05-10", dateTimeFormatter)
         );
 
         var p2 = new Pessoa(
                 2L,
                 "Maria de Fátima",
-                ZonedDateTime.parse("1990-09-09T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2002-04-06T00:00:00Z", dateTimeFormatter)
+                LocalDate.parse("1990-09-09", dateTimeFormatter),
+                LocalDate.parse("2002-04-06", dateTimeFormatter)
         );
 
         var p3 = new Pessoa(
                 3L,
                 "Marco Aurélio",
-                ZonedDateTime.parse("2005-04-06T00:00:00Z", dateTimeFormatter),
-                ZonedDateTime.parse("2022-04-06T00:00:00Z", dateTimeFormatter)
+                LocalDate.parse("2005-04-06", dateTimeFormatter),
+                LocalDate.parse("2022-04-06", dateTimeFormatter)
         );
 
         pessoasMap.put(p1.getId(), p1);

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
@@ -53,7 +52,7 @@ public class PessoaServiceImpl implements PessoaService {
 
         var pessoa = pessoaRepository.consultaPorId(id).orElseThrow(() -> new NaoEncontradoException("Pessoa com ID " + id + " não encontrada."));
 
-        var dataNascimento = pessoa.getDataNascimento().toLocalDate();
+        var dataNascimento = pessoa.getDataNascimento();
         var hoje = LocalDate.now();
 
         Long totalDias = output.equals("days") ? ChronoUnit.DAYS.between(dataNascimento, hoje) : null;
@@ -69,7 +68,7 @@ public class PessoaServiceImpl implements PessoaService {
 
         var pessoa = pessoaRepository.consultaPorId(id).orElseThrow(() -> new NaoEncontradoException("Pessoa com ID " + id + " não encontrada."));
 
-        long anosDeServico = ChronoUnit.YEARS.between(pessoa.getDataAdmissao().toLocalDate(), ZonedDateTime.now().toLocalDate());
+        long anosDeServico = ChronoUnit.YEARS.between(pessoa.getDataAdmissao(), ZonedDateTime.now().toLocalDate());
         var salarioFull = calculaSalarioFull(anosDeServico);
         var salarioMin = calculaSalarioMin(salarioFull);
 
@@ -160,14 +159,10 @@ public class PessoaServiceImpl implements PessoaService {
         var pessoaEncontrada = pessoa.get();
 
         pessoaEncontrada.setNome(requestDto.nome());
-        pessoaEncontrada.setDataAdmissao(converterComZona(requestDto.dataAdmissao()));
-        pessoaEncontrada.setDataNascimento(converterComZona(requestDto.dataNascimento()));
+        pessoaEncontrada.setDataAdmissao(requestDto.dataAdmissao());
+        pessoaEncontrada.setDataNascimento(requestDto.dataNascimento());
 
         return pessoaRepository.salvarPessoa(pessoaEncontrada);
-    }
-
-    private ZonedDateTime converterComZona(LocalDate data) {
-        return data.atStartOfDay(ZoneId.of("America/Sao_Paulo"));
     }
 
     @Override
@@ -186,11 +181,11 @@ public class PessoaServiceImpl implements PessoaService {
         }
 
         if (requestDto.dataAdmissao() != null) {
-            pessoaEncontrada.setDataAdmissao(converterComZona(requestDto.dataAdmissao()));
+            pessoaEncontrada.setDataAdmissao(requestDto.dataAdmissao());
         }
 
         if (requestDto.dataNascimento() != null) {
-            pessoaEncontrada.setDataNascimento(converterComZona(requestDto.dataNascimento()));
+            pessoaEncontrada.setDataNascimento(requestDto.dataNascimento());
         }
 
         return pessoaRepository.salvarPessoa(pessoaEncontrada);

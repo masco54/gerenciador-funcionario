@@ -1,15 +1,15 @@
 package com.br.sccon.gerenciador.pessoas.service.domain;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 public class Pessoa {
 
     private Long id;
     private String nome;
-    private ZonedDateTime dataNascimento;
-    private ZonedDateTime dataAdmissao;
+    private LocalDate dataNascimento;
+    private LocalDate dataAdmissao;
 
-    public Pessoa(Long id, String nome, ZonedDateTime dataNascimento, ZonedDateTime dataAdmissao) {
+    public Pessoa(Long id, String nome, LocalDate dataNascimento, LocalDate dataAdmissao) {
         this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
@@ -32,19 +32,19 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    public ZonedDateTime getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(ZonedDateTime dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public ZonedDateTime getDataAdmissao() {
+    public LocalDate getDataAdmissao() {
         return dataAdmissao;
     }
 
-    public void setDataAdmissao(ZonedDateTime dataAdmissao) {
+    public void setDataAdmissao(LocalDate dataAdmissao) {
         this.dataAdmissao = dataAdmissao;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 }
